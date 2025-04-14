@@ -1,4 +1,5 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import { register } from "../../api/user.js";
 import React, { useEffect, useState } from "react";
 
 const Register = () => {
@@ -20,6 +21,7 @@ const Register = () => {
 
     const [invalidEmail,setInvalidEmail] = useState(false)
     const [invalidPhone,setInvalidPhone] = useState(false)
+    const [invalidPassword,setInvalidPassword] = useState(false)
 
     const [isRegisterDisabled,setIsRegisterDisabled] = useState(true)
 
@@ -48,13 +50,15 @@ const Register = () => {
         }
     }
 
-    const handlePhoneNumber = ()=>{
+    const handlePhoneNumber = (e)=>{
         const phoneRegex = /^[0-9]{10}$/
         const inputPhone = e.target.value
         if(inputPhone.length!=0){
             if(phoneRegex.test(inputPhone)){
                 setUserDetails({...userDetails,phone:inputPhone})
                 setInvalidPhone(false)
+                setError({...error,phone:false})
+
             }else{
                 setInvalidPhone(true)
             }
@@ -63,40 +67,59 @@ const Register = () => {
         }
     }
 
-    const handlePassword = ()=>{
-        const passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+    const handlePassword = (e)=>{
         const inputPassword = e.target.value
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
         if(inputPassword.length!=0){
             if(passwordRegex.test(inputPassword)){
+                console.log("calling")
                 setUserDetails({...userDetails,password:inputPassword})
+                setInvalidPassword(false)
+            }else{
+                setInvalidPassword(true)
             }
         }
     }
 
-    const handleConfirmPassword = ()=>{
+    const handleConfirmPassword = (e)=>{
         const inputConfirmPassword = e.target.value
-        if(inputPassword.length!=0){
+        if(inputConfirmPassword.length!=0){
             if(inputConfirmPassword === userDetails.password){
-                setUserDetails({...userDetails,password:inputPassword})
+                setUserDetails({...userDetails,password:inputConfirmPassword})
+                setError({...error,confirmPassword:false})
+            }else{
+                setError({...error,confirmPassword:true})
             }
+        }else{
+            setError({...error,confirmPassword:true})
         }
     }
 
-    useEffect(()=>{
-        if(userDetails.fullName && userDetails.email && userDetails.phone && userDetails.password && userDetails.confirmPassword){
-            setIsRegisterDisabled(false)
-        }else{
-            setIsRegisterDisabled(true)
-        }
-    })
+    // useEffect(()=>{
+    //     if(userDetails.fullName.length!=0 && userDetails.email.length!=0 && userDetails.password.length!=0 && userDetails.confirmPassword.length!=0 && userDetails.phone.length!=0){
+    //         setIsRegisterDisabled(false)
+    //     }else{
+    //         setIsRegisterDisabled(true)
+    //     }
+    // },[userDetails.fullName,userDetails.email,userDetails.password,userDetails.phone,userDetails.confirmPassword])
+
+    const handleRegister = ()=>{
+        const fullName = userDetails.fullName
+        const email = userDetails.email
+        const phone = userDetails.phone
+        const password = userDetails.password
+
+        register({fullName,email,phone,password})
+    }
   return (
     <div className="w-full">
-      <div class="w-1/2 max-w-md mx-auto shadow-xl rounded p-8">
+      <div className="w-1/2 max-w-md mx-auto shadow-xl rounded p-8">
         <h2 className="text-3xl font-medium text-center mb-5">Register</h2>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="name"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Full Name
           </label>
@@ -104,15 +127,15 @@ const Register = () => {
             type="text"
             id="name"
             onChange={handleNameInput}
-            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
             required
           />
-          {error.fullName && <p class="mt-2 text-sm text-red-600 dark:text-red-500">Please enter full name</p>}
+          {error.fullName && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Please enter full name</p>}
         </div>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="email"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Email
           </label>
@@ -120,16 +143,16 @@ const Register = () => {
             type="email"
             id="email"
             onChange={handleEmailInput}
-            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
             required
           />
-          {error.email && <p class="mt-2 text-sm text-red-600 dark:text-red-500">Please enter email</p>}
-          {invalidEmail && <p class="mt-2 text-sm text-red-600 dark:text-red-500">Invalid Email</p>}
+          {error.email && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Please enter email</p>}
+          {invalidEmail && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Invalid Email</p>}
         </div>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="phone"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="phone"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Phone Number
           </label>
@@ -137,16 +160,16 @@ const Register = () => {
             type="text"
             id="phone"
             onChange={handlePhoneNumber}
-            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
             required
           />
-          {error.phone && <p class="mt-2 text-sm text-red-600 dark:text-red-500">Please enter phone</p>}
-          {invalidPhone && <p class="mt-2 text-sm text-red-600 dark:text-red-500">Invalid phone number</p>}
+          {error.phone && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Please enter phone</p>}
+          {invalidPhone && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Invalid phone number</p>}
         </div>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="password"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="password"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Password
           </label>
@@ -154,14 +177,16 @@ const Register = () => {
             type="password"
             id="password"
             onChange={handlePassword}
-            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
             required
           />
+          {error.password && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Please enter password</p>}
+          {invalidPassword && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Password length should be minimum 8 characters with at least one uppercase letter, one lowercase letter, one number and one special character</p>}
         </div>
-        <div class="mb-5">
+        <div className="mb-5">
           <label
-            for="repeat-password"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="repeat-password"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Confirm password
           </label>
@@ -169,38 +194,17 @@ const Register = () => {
             type="password"
             id="repeat-password"
             onChange={handleConfirmPassword}
-            class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
+            className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light"
             required
           />
-        </div>
-        <div class="flex items-start mb-5">
-          <div class="flex items-center h-5">
-            <input
-              id="terms"
-              type="checkbox"
-              value=""
-              class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-              required
-            />
-          </div>
-          <label
-            for="terms"
-            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            I agree with the{" "}
-            <a
-              href="#"
-              class="text-blue-600 hover:underline dark:text-blue-500"
-            >
-              terms and conditions
-            </a>
-          </label>
+          {error.confirmPassword && <p className="mt-2 text-sm text-red-600 dark:text-red-500">Password doesn't match</p>}
         </div>
         <div className="w-full flex justify-center">
         <button
           type="submit"
-          disabled={isRegisterDisabled}
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer disabled:bg-blue-300"
+        //   disabled={isRegisterDisabled}
+            onClick={handleRegister}
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer disabled:bg-blue-300"
         >
           Register Me
         </button>
