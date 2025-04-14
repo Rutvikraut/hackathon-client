@@ -1,4 +1,7 @@
-export const register = ({fullName,email,phone,password})=>{
+// import axios from "axios"
+
+const url = 'http://localhost:4000'
+export const register = async({fullName,email,phone,password})=>{
     const body = {
         fullName,
         email,
@@ -6,4 +9,6 @@ export const register = ({fullName,email,phone,password})=>{
         password
     }
     console.log(body)
+    console.log(url)
+    // await axios(`${url}/register`)
 }
