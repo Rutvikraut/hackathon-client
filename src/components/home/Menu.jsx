@@ -1,14 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../App";
 
 const Menu = () => {
+    const { user,setUser } = useContext(AuthContext)
     const [username,setusername] = useState('')
     useEffect(()=>{
         const username = sessionStorage.getItem('name', name)
         setusername(username)
-    })
+    },[])
+
+    const navigate = useNavigate()
+    const handleSignOut = ()=>{
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('name')
+        setUser(null)
+        navigate('/login')
+    }
+
   return (
-    <div classNameName="">
+    <div>
       <aside
         id="default-sidebar"
         className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
@@ -44,12 +55,12 @@ const Menu = () => {
               </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to={'/findBlog'}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <span className="flex-1 ms-3 whitespace-nowrap">Find Blog</span>
-              </a>
+              </Link>
             </li>
             <li>
               <Link
@@ -60,17 +71,16 @@ const Menu = () => {
               </Link>
             </li>
             <li>
-              <Link
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+              <button
+                onClick={handleSignOut}
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer"
               >
                 <span className="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
-              </Link>
+              </button>
             </li>
           </ul>
         </div>
       </aside>
-
-
     </div>
   );
 };

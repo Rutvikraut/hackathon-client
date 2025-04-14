@@ -114,7 +114,7 @@ const Register = () => {
 
         const response = await register({fullName,email,phone,password})
         if(response.status == 'success'){
-          navigate('/')
+          navigate('/login')
         }
         
     }

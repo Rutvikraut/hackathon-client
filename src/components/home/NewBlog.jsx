@@ -18,7 +18,6 @@ const NewBlog = () => {
         const fetchCategories = async()=>{
             try {
                 const response = await getAllCategories()
-            
                 console.log(response.data[0].title)
                 setCategories(response.data)
 
@@ -75,7 +74,7 @@ const NewBlog = () => {
             for="large-input"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Large input
+            Content
           </label>
           <input
             type="text"

@@ -1,19 +1,22 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { loginUser } from "../../api/user.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../App.jsx";
 
 const login = () => {
+  const { setUser } = useContext(AuthContext)
     const [userDetails,setUserDetails] = useState({
         email:'',
         password:''
-
     })
 
     const [error,setError] = useState({
         email:false,
         password:false
     })
+
+    const navigate = useNavigate()
 
     const handleLogin = async ()=>{
       const email = userDetails.email
@@ -22,8 +25,11 @@ const login = () => {
       console.log(response)
       if(response.status == 'success'){
         const { token, name } = response.data
+        console.log(response.data)
         sessionStorage.setItem('token', token)
         sessionStorage.setItem('name', name)
+        setUser({name})
+        navigate('/')
       }
     }
 

@@ -26,6 +26,8 @@ export const loginUser = async ({ email, password }) => {
         }
 
         const response = await axios.post(`${url}/login`, body)
+
+        console.log(response)
         return response.data
 
     } catch (ex) {
