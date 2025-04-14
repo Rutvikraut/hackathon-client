@@ -18,3 +18,17 @@ export const addBlog = async({title,content,categoryId})=>{
         console.log(`exception occurred: `, ex)
     }
 }
+
+export const getAllBlog = async()=>{
+
+    console.log(token)
+    try {
+        const response = await axios.get(`${url}/getblogs`,{
+            headers: {
+                token,
+            }},)
+        return response.data
+    } catch (ex) {
+        console.log(`exception occurred: `, ex)
+    }
+}
