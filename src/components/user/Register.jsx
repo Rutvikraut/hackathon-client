@@ -111,6 +111,8 @@ const Register = () => {
         const password = userDetails.password
 
         register({fullName,email,phone,password})
+
+        
     }
   return (
     <div className="w-full">
