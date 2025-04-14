@@ -12,3 +12,19 @@ export const getAllCategories = async()=>{
         console.log(`exception occurred: `, ex)
     }
 }
+
+export const getCategoryByName = async({selectedCategory})=>{
+    const body = {
+        categoryName:selectedCategory
+    }
+    console.log(body)
+    try {
+        const response = await axios.post(`${url}/getCategoryByName`,body,{
+            headers: {
+                token,
+            }},)
+        return response.data
+    } catch (ex) {
+        console.log(`exception occurred: `, ex)
+    }
+}
