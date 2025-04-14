@@ -1,9 +1,13 @@
+import Login from "./components/user/login"
+import Register from "./components/user/Register"
+
 function App() {
 
   return (
-    <>
-      <h1>Client</h1>
-    </>
+    <div className="w-screen h-screen flex justify-center items-center">
+    {/* <Login/> */}
+    <Register/>
+    </div>
   )
 }
 
