@@ -1,5 +1,7 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { loginUser } from "../../api/user.js";
+import { Link } from "react-router-dom";
 
 const login = () => {
     const [userDetails,setUserDetails] = useState({
@@ -12,6 +14,18 @@ const login = () => {
         email:false,
         password:false
     })
+
+    const handleLogin = async ()=>{
+      const email = userDetails.email
+      const password = userDetails.password
+      const response  = await loginUser({email,password})
+      console.log(response)
+      if(response.status == 'success'){
+        const { token, name } = response.data
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('name', name)
+      }
+    }
 
   return (
     <div className="w-full">
@@ -57,10 +71,17 @@ const login = () => {
         <div className="w-full flex justify-center">
         <button
           type="submit"
+          onClick={handleLogin}
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer disabled:bg-blue-300"
         >
           Login
         </button>
+        </div>
+        <div className="w-full flex justify-center mt-1">
+        Not Registered ? 
+        <Link to={'/register'} className="text-blue-800">
+           Register Now
+        </Link>
         </div>
       </div>
     </div>

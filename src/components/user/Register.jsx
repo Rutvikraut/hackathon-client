@@ -1,6 +1,7 @@
 import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { register } from "../../api/user.js";
 import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [userDetails,setUserDetails] = useState({
@@ -25,6 +26,7 @@ const Register = () => {
 
     const [isRegisterDisabled,setIsRegisterDisabled] = useState(true)
 
+    const navigate = useNavigate()
     const handleNameInput=(e)=>{
         const inputName = e.target.value
         if(inputName.length!=0){
@@ -104,14 +106,16 @@ const Register = () => {
     //     }
     // },[userDetails.fullName,userDetails.email,userDetails.password,userDetails.phone,userDetails.confirmPassword])
 
-    const handleRegister = ()=>{
+    const handleRegister = async()=>{
         const fullName = userDetails.fullName
         const email = userDetails.email
         const phone = userDetails.phone
         const password = userDetails.password
 
-        register({fullName,email,phone,password})
-
+        const response = await register({fullName,email,phone,password})
+        if(response.status == 'success'){
+          navigate('/')
+        }
         
     }
   return (
