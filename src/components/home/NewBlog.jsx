@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAllCategories, getCategoryByName } from "../../api/category";
 import { addBlog } from "../../api/blog";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const NewBlog = () => {
     const [categories,setCategories] = useState([])
@@ -13,6 +15,15 @@ const NewBlog = () => {
         console.log(category)
         setSelectedCategory(category)
     }
+
+    const navigate = useNavigate();
+
+useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        navigate("/login");
+    }
+}, []);
 
     useEffect(()=>{
         const fetchCategories = async()=>{
@@ -35,11 +46,18 @@ const NewBlog = () => {
         const response = await getCategoryByName({selectedCategory})
         const categoryId = response.data[0].categoryId
         const blogResponse = await addBlog({title,content,categoryId})
-        console.log(blogResponse)
+        if(blogResponse.status == 'success'){
+          toast.success('Blog Added Successfuly')
+        }else{
+          toast.error('Something went wrong')
+        }
     }
   return (
-    <div className="w-100">
-      <div className="max-w-sm mx-auto">
+    <div className="h-screen flex flex-col justify-center items-center ms-34">
+      <div className="w-full mb-5 text-center font-medium">
+        <h2 className="text-3xl">Add New Blog</h2>
+      </div>
+      <div className="w-1/2 shadow-xl px-8 py-8">
         <div className="mb-5">
           <label
             for="title"
@@ -82,7 +100,7 @@ const NewBlog = () => {
             onChange={(e)=>{
                 setContent(e.target.value)
             }}
-            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block w-full h-28 p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
         </div>
 
@@ -91,7 +109,7 @@ const NewBlog = () => {
           <button
             type="submit"
             onClick={handleAddBlog}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer"
           >
             Add Blog
           </button>

@@ -1,5 +1,5 @@
 import axios from "axios"
-const url = 'http://localhost:4000'
+import {baseUrl} from "../utils/config"
 const token = sessionStorage.getItem('token')
 export const addBlog = async({title,content,categoryId})=>{
     const body = {
@@ -9,7 +9,7 @@ export const addBlog = async({title,content,categoryId})=>{
     }
     console.log(token)
     try {
-        const response = await axios.post(`${url}/addblog`,body,{
+        const response = await axios.post(`${baseUrl}/addblog`,body,{
             headers: {
                 token,
             }},)
@@ -22,19 +22,21 @@ export const addBlog = async({title,content,categoryId})=>{
 export const getAllBlog = async()=>{
 
     try {
-        const response = await axios.get(`${url}/getblogs`,{
+        const response = await axios.get(`${baseUrl}/getblogs`,{
             headers: {
                 token,
             }},)
+        console.log(response)
         return response.data
     } catch (ex) {
         console.log(`exception occurred: `, ex)
     }
 }
 
-export const getMyBlog = async()=>{
+export const getMyBlog = async(token)=>{
+
     try {
-        const response = await axios.get(`${url}/getMyBlogs`,{
+        const response = await axios.get(`${baseUrl}/getMyBlogs`,{
             headers: {
                 token,
             }},)
@@ -49,7 +51,7 @@ export const getBlogByTitle = async({title})=>{
         title
     }
     try {
-        const response = await axios.post(`${url}/getBlogsByTitle`,body,{
+        const response = await axios.post(`${baseUrl}/getBlogsByTitle`,body,{
             headers: {
                 token,
             }},)
@@ -63,7 +65,7 @@ export const getBlogByTitle = async({title})=>{
 
 export const deleteBlog = async (blogId)=>{
     try {
-        const response = await axios.delete(`${url}/deleteBlog/${blogId}`,{
+        const response = await axios.delete(`${baseUrl}/deleteBlog/${blogId}`,{
             headers: {
                 token,
             }},)
@@ -77,7 +79,7 @@ export const deleteBlog = async (blogId)=>{
 
 export const deleteMyBlog = async (blogId)=>{
     try {
-        const response = await axios.delete(`${url}/deleteBlog/${blogId}`,{
+        const response = await axios.delete(`${baseUrl}/deleteBlog/${blogId}`,{
             headers: {
                 token,
             }},)

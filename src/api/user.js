@@ -1,6 +1,6 @@
 import axios from "axios"
+import {baseUrl} from "../utils/config"
 
-const url = 'http://localhost:4000'
 export const register = async ({ fullName, email, phone, password }) => {
     try {
         const body = {
@@ -10,7 +10,7 @@ export const register = async ({ fullName, email, phone, password }) => {
             password
         }
         console.log(body)
-        const response = await axios.post(`${url}/register`, body)
+        const response = await axios.post(`${baseUrl}/register`, body)
         return response.data
 
     } catch (ex) {
@@ -24,13 +24,11 @@ export const loginUser = async ({ email, password }) => {
             email,
             password
         }
-
-        const response = await axios.post(`${url}/login`, body)
-
+        const response = await axios.post(`${baseUrl}/login`, body)
         console.log(response)
         return response.data
 
-    } catch (ex) {
-        console.log(`exception occurred: `, ex)
+    } catch (error) {
+        console.log(`exception occurred: `, error)
     }
 }

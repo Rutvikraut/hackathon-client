@@ -1,4 +1,3 @@
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
 import { register } from "../../api/user.js";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -119,7 +118,7 @@ const Register = () => {
         
     }
   return (
-    <div className="w-full">
+    <div className="w-screen h-screen flex justify-center items-center">
       <div className="w-1/2 max-w-md mx-auto shadow-xl rounded p-8">
         <h2 className="text-3xl font-medium text-center mb-5">Register</h2>
         <div className="mb-5">

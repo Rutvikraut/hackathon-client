@@ -1,9 +1,10 @@
 import axios from "axios"
-const url = 'http://localhost:4000'
+import {baseUrl} from "../utils/config"
+
 const token = sessionStorage.getItem('token')
 export const getAllCategories = async()=>{
     try {
-        const response = await axios.get(`${url}/getCategories`,{
+        const response = await axios.get(`${baseUrl}/getCategories`,{
             headers: {
                 token,
             }},)
@@ -19,7 +20,7 @@ export const getCategoryByName = async({selectedCategory})=>{
     }
     console.log(body)
     try {
-        const response = await axios.post(`${url}/getCategoryByName`,body,{
+        const response = await axios.post(`${baseUrl}/getCategoryByName`,body,{
             headers: {
                 token,
             }},)
@@ -35,7 +36,7 @@ export const addCategory = async({category})=>{
     }
     console.log(body)
     try {
-        const response = await axios.post(`${url}/addCategory`,body,{
+        const response = await axios.post(`${baseUrl}/addCategory`,body,{
             headers: {
                 token,
             }},)
@@ -47,7 +48,7 @@ export const addCategory = async({category})=>{
 
 export const deleteCategory = async (id)=>{
     try {
-        const response = await axios.delete(`${url}/deleteCategory/${id}`,{
+        const response = await axios.delete(`${baseUrl}/deleteCategory/${id}`,{
             headers: {
                 token,
             }},)
