@@ -7,29 +7,30 @@ const Categories = () => {
     const [category,setCategory] = useState()
     const [categories,setCategories] = useState([])
 
+    const fetchCategories = async()=>{
+      try {
+          const response = await getAllCategories()
+          if(response.status == 'success'){
+            setCategories(response.data)
+          }
+
+      } catch (error) {
+          console.log(error)
+        }
+      }
     const handleAddCategory = async()=>{
       try {
         const response = await addCategory({category})
         if(response.status == 'success'){
           toast.success('Category Added Successfully')
-          setCategory('')
         }
+        setCategory('')
         fetchCategories()
       } catch (error) {
         console.log(error)
       }
     }
 
-    const fetchCategories = async()=>{
-      try {
-          const response = await getAllCategories()
-          console.log(response.data[0].title)
-          setCategories(response.data)
-
-      } catch (error) {
-          console.log(error)
-        }
-      }
 
       const navigate = useNavigate();
 
